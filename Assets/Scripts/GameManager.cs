@@ -1,48 +1,28 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
 
-public class PlayerController : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    private Rigidbody rb;
+    [SerializeField] private TextMeshProUGUI countText;
+    [SerializeField] private GameObject winTextObject;
 
     private int count;
 
-    private float movementX;
-    private float movementY;
-
-    public float speed = 0;
-
-    public TextMeshProUGUI countText;
-    public GameObject winTextObject;
-
-    // Start
-    void Start()
+    // Awake
+    private void Awake()
     {
         count = 0;
         winTextObject.SetActive(false);
-
-        rb = GetComponent<Rigidbody>();
     }
 
     // FixedUpdate
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         SetCountText();
-
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-
-        rb.AddForce(movement * speed);
     }
 
-    void OnMove(InputValue movementValue)
-    {
-        Vector2 movementVector = movementValue.Get<Vector2>();
-
-        movementX = movementVector.x;
-        movementY = movementVector.y;
-    }
-
+    // SetCountText
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
@@ -53,6 +33,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // OnTriggerEnter
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("PickUp"))
@@ -64,6 +45,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // OnCollisionEnter
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
